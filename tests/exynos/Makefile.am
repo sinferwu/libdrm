@@ -23,11 +23,13 @@ endif
 if HAVE_INSTALL_TESTS
 bin_PROGRAMS += \
 	exynos_fimg2d_perf \
-	exynos_fimg2d_event
+	exynos_fimg2d_event \
+	exynos_fimg2d_verify_copy
 else
 noinst_PROGRAMS += \
 	exynos_fimg2d_perf \
-	exynos_fimg2d_event
+	exynos_fimg2d_event \
+	exynos_fimg2d_verify_copy
 endif
 
 exynos_fimg2d_perf_LDADD = \
@@ -35,6 +37,10 @@ exynos_fimg2d_perf_LDADD = \
 	$(top_builddir)/exynos/libdrm_exynos.la
 
 exynos_fimg2d_event_LDADD = \
+	$(top_builddir)/libdrm.la \
+	$(top_builddir)/exynos/libdrm_exynos.la
+
+exynos_fimg2d_verify_copy_LDADD = \
 	$(top_builddir)/libdrm.la \
 	$(top_builddir)/exynos/libdrm_exynos.la
 
