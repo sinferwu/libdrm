@@ -25,14 +25,16 @@ bin_PROGRAMS += \
 	exynos_fimg2d_perf \
 	exynos_fimg2d_event \
 	exynos_fimg2d_verify_copy \
-	exynos_fimg2d_thread_scale
+	exynos_fimg2d_thread_scale \
+	exynos_mixer_cfg
 else
 noinst_PROGRAMS += \
 	exynos_fimg2d_perf \
 	exynos_fimg2d_rop \
 	exynos_fimg2d_event \
 	exynos_fimg2d_verify_copy \
-	exynos_fimg2d_thread_scale
+	exynos_fimg2d_thread_scale \
+	exynos_mixer_cfg
 endif
 
 exynos_fimg2d_perf_LDADD = \
@@ -63,3 +65,6 @@ exynos_fimg2d_test_LDADD = \
 exynos_fimg2d_test_SOURCES = \
 	exynos_fimg2d_test.c
 
+exynos_mixer_cfg_LDADD = \
+	$(top_builddir)/libdrm.la \
+	$(top_builddir)/exynos/libdrm_exynos.la
