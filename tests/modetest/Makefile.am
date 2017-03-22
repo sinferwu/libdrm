@@ -22,4 +22,5 @@ modetest_SOURCES = $(MODETEST_FILES)
 modetest_LDADD = \
 	$(top_builddir)/libdrm.la \
 	$(top_builddir)/tests/util/libutil.la \
-	$(CAIRO_LIBS)
+	$(CAIRO_LIBS) \
+	-ldl

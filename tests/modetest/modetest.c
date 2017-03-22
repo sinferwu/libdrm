@@ -1152,6 +1152,7 @@ static int set_plane(struct device *dev, struct plane_arg *p)
 {
 	drmModePlane *ovr;
 	uint32_t handles[4] = {0}, pitches[4] = {0}, offsets[4] = {0};
+	uint64_t modifiers[4] = {0};
 	uint32_t plane_id;
 	struct bo *plane_bo;
 	uint32_t plane_flags = 0;
@@ -1212,11 +1213,23 @@ static int set_plane(struct device *dev, struct plane_arg *p)
 
 	p->bo = plane_bo;
 
-	/* just use single plane format for now.. */
-	if (drmModeAddFB2(dev->fd, p->w, p->h, p->fourcc,
-			handles, pitches, offsets, &p->fb_id, plane_flags)) {
-		fprintf(stderr, "failed to add fb: %s\n", strerror(errno));
-		return -1;
+	if (p->fourcc == DRM_FORMAT_NV12) {
+		plane_flags |= DRM_MODE_FB_MODIFIERS;
+		modifiers[0] = DRM_FORMAT_MOD_SAMSUNG_64_32_TILE;
+		modifiers[1] = DRM_FORMAT_MOD_SAMSUNG_64_32_TILE;
+
+		if (drmModeAddFB2WithModifiers(dev->fd, p->w, p->h, p->fourcc,
+				handles, pitches, offsets, modifiers, &p->fb_id, plane_flags)) {
+			fprintf(stderr, "failed to add fb: %s\n", strerror(errno));
+			return -1;
+		}
+	} else {
+		/* just use single plane format for now.. */
+		if (drmModeAddFB2(dev->fd, p->w, p->h, p->fourcc,
+				handles, pitches, offsets, &p->fb_id, plane_flags)) {
+			fprintf(stderr, "failed to add fb: %s\n", strerror(errno));
+			return -1;
+		}
 	}
 
 	crtc_w = p->w * p->scale;
